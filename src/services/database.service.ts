@@ -6,6 +6,7 @@ const url = process.env.MONGO_URL || "mongodb://localhost:27017/twitter-dev"
 class DatabaseService{
     private client:MongoClient
     private db:Db
+  
   constructor(){
       this.client = new MongoClient(url);
       this.db = this.client.db("twitter-dev")
@@ -17,8 +18,10 @@ class DatabaseService{
       await this.db.command({ ping: 1 });
       console.log("Connected successfully to server");
       
-    } finally {
-      await this.client.close();
+    } catch(error) {
+      console.error("MongoDB connection error", error);
+      process.exit(1);
+      
     }
   }
 
@@ -28,5 +31,4 @@ class DatabaseService{
 }
 
 const databaseService = new DatabaseService();
-
 export default databaseService;
