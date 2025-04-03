@@ -1,6 +1,6 @@
 import {Collection, Db, MongoClient} from 'mongodb';
 import 'dotenv/config' 
-import User from '~/models/Schema/User.schema';
+import User from '../models/Schema/User.schema';
 const url = process.env.MONGO_URL || "mongodb://localhost:27017/twitter-dev"
 
 class DatabaseService{

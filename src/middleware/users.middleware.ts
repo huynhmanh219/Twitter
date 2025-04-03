@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { checkSchema } from "express-validator";
-import databaseService from "~/services/database.service";
-import usersService from "~/services/users.services";
-import { validate } from "~/utils/validation";
+import databaseService from "../services/database.service";
+import usersService from "../services/users.services";
+import { validate } from "../utils/validation";
+import { ErrorWithStatus } from "../models/Errors";
 
 export const loginValidator = (req: Request, res: Response, next: NextFunction) => {
     const {email,password}= req.body
@@ -11,6 +12,8 @@ export const loginValidator = (req: Request, res: Response, next: NextFunction) 
     }
       next()
 }
+
+
 export const registerValidator = validate(checkSchema({
   name:{
     notEmpty:true,
@@ -31,7 +34,7 @@ export const registerValidator = validate(checkSchema({
       options:async (value)=>{
         const emailExist = usersService.checkEmailExist(value)
         if(await emailExist){
-          throw new Error("Email already exists")
+          throw new ErrorWithStatus({message:"Email already exists",status:400})
         }
         return true
 

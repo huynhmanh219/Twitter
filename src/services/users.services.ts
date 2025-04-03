@@ -1,9 +1,9 @@
-import { RegisterRequestBody } from "~/models/requests/User.requests";
+import { RegisterRequestBody } from "../models/requests/User.requests";
 import databaseService from "./database.service"
-import User from "~/models/Schema/User.schema";
-import { passwordHash } from "~/utils/crypto";
-import { signToken } from "~/utils/jwt";
-import { TokenType } from "~/constants/enums";
+import User from "../models/Schema/User.schema";
+import { passwordHash } from "../utils/crypto";
+import { signToken } from "../utils/jwt";
+import { TokenType } from "../constants/enums";
 
 class UsersService{
   private async signAccessToken(userId:string)
@@ -40,13 +40,11 @@ class UsersService{
       password:passwordHash(payload.password),
     }))
     const user_id = result.insertedId.toString();
-    console.log(user_id);
     
     const [access_token,refresh_token] = await Promise.all([
       this.signAccessToken(user_id),
       this.signRefreshToken(user_id)
     ])
-    console.log(access_token,refresh_token);
     
     return {
       access_token,
